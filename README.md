@@ -19,3 +19,7 @@ Then execuable file is in the folder, it will record 4 channel voice use Kinect,
 
 ## How to identify
 
+python SpeakerAPI/identification/identifyVoice.py sample.wav
+
+It will return recognized speaker
+
