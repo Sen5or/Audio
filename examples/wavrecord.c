@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
 	fwrite(buf, 1, 4, fsample);
 	
 	fseek(fsample, 40, SEEK_SET);
-	int chunksize = state.samples * 2;
+	chunksize = state.samples * 2;
 	buf[0] = (chunksize & 0x000000ff);
 	buf[1] = (chunksize & 0x0000ff00) >> 8;
 	buf[2] = (chunksize & 0x00ff0000) >> 16;
