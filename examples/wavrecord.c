@@ -49,7 +49,7 @@ char wavheader[] = {
 
 
 /** 
- *  fgao: Defined new wav header, 1 channel * 16 kbps * 16 bit (replace 32 bit above)
+ *  @FGao: Defined new wav header, 1 channel * 16 kbps * 16 bit
  */
 char wavheader_modify[] = {
 	0x52, 0x49, 0x46, 0x46, // ChunkID = "RIFF"
@@ -60,7 +60,7 @@ char wavheader_modify[] = {
 	0x01, 0x00, 0x01, 0x00, // AudioFormat = 1 (linear quantization) | NumChannels = 1
 	0x80, 0x3e, 0x00, 0x00, // SampleRate = 16000 Hz
 	0x00, 0x7d, 0x00, 0x00, // ByteRate = SampleRate * NumChannels * BitsPerSample/8 = 32000
-	0x02, 0x00, 0x10, 0x00, // BlockAlign = NumChannels * BitsPerSample/8 = 4 | BitsPerSample = 32
+	0x02, 0x00, 0x10, 0x00, // BlockAlign = NumChannels * BitsPerSample/8 = 2 | BitsPerSample = 16
 	0x64, 0x61, 0x74, 0x61, // Subchunk2ID = "data"
 	0x00, 0x00, 0x00, 0x00, // Subchunk2Size = NumSamples * NumChannels * BitsPerSample / 8 (will be overwritten later)
 };
@@ -157,9 +157,10 @@ int main(int argc, char** argv) {
 		fclose(state.logfiles[i]);
 	}
 
+	// @FGao : Sample from channel0.wav, change BitPerSample from 32 to 16. Write the file to sample.wav
+
 	FILE* channel = fopen("channel0.wav", "rb");
 	FILE* fsample = fopen("sample.wav", "wb");
-	fseek(fread, 44, SEEK_SET);
 	fwrite(wavheader_modify, 1, 44, fsample);
 	
 	char buf[4];
@@ -179,19 +180,11 @@ int main(int argc, char** argv) {
 	buf[3] = (chunksize & 0xff000000) >> 24;
 	fwrite(buf, 1, 4, fsample);
 	
-	fread(buf, 1, 2, fread);	
+	fseek(channel, 46, SEEK_SET);
 	while(!feof(fread)) {
-		fread(buf, 1, 4, fread);
-		fwrite(buf, 1, 2, fread);
+		fread(buf, 1, 4, channel);
+		fwrite(buf, 1, 2, fsample);
 	}
-
-
-
-
-
-
-	
-
 
 	freenect_shutdown(f_ctx);
 	return 0;
