@@ -181,7 +181,7 @@ int main(int argc, char** argv) {
 	fwrite(buf, 1, 4, fsample);
 	
 	fseek(channel, 46, SEEK_SET);
-	while(!feof(fread)) {
+	while(!feof(channel)) {
 		fread(buf, 1, 4, channel);
 		fwrite(buf, 1, 2, fsample);
 	}
