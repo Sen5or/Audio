@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 	state.logfiles[1] = fopen("channel2.wav", "wb");
 	state.logfiles[2] = fopen("channel3.wav", "wb");
 	state.logfiles[3] = fopen("channel4.wav", "wb");
-	printf("Open filestream);
+	printf("Open filestream");
 	fwrite(wavheader, 1, 44, state.logfiles[0]);
 	fwrite(wavheader, 1, 44, state.logfiles[1]);
 	fwrite(wavheader, 1, 44, state.logfiles[2]);
