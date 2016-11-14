@@ -99,10 +99,10 @@ int main(int argc, char** argv) {
 
 	int nr_devices = freenect_num_devices (f_ctx);
 	printf ("Number of devices found: %d\n", nr_devices);
-	if (nr_devices < 1) {
-		freenect_shutdown(f_ctx);
-		return 1;
-	}
+	// if (nr_devices < 1) {
+	// 	freenect_shutdown(f_ctx);
+	// 	return 1;
+	// }
 	printf("Kinect Found");
 	int user_device_number = 0;
 	if (freenect_open_device(f_ctx, &f_dev, user_device_number) < 0) {
