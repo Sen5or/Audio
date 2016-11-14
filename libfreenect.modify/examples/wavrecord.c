@@ -27,6 +27,7 @@
 #include "libfreenect.h"
 #include "libfreenect_audio.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
 
 static freenect_context* f_ctx;
@@ -134,7 +135,7 @@ int main(int argc, char** argv) {
 		// interesting.
 	//}
 	
-	Delay(10000);
+	sleep(10000);
 	freenect_stop_audio(f_dev);
 	
 	// Make the WAV header valid for each of the four files
