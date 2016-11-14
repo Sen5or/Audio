@@ -157,9 +157,9 @@ int main(int argc, char** argv) {
 		fclose(state.logfiles[i]);
 	}
 
-	// @FGao : Sample from channel0.wav, change BitPerSample from 32 to 16. Write the file to sample.wav
+	// @FGao : Sample from channel1.wav, change BitPerSample from 32 to 16. Write the file to sample.wav
 
-	FILE* channel = fopen("channel0.wav", "rb");
+	FILE* channel = fopen("channel1.wav", "rb");
 	FILE* fsample = fopen("sample.wav", "wb");
 	fwrite(wavheader_modify, 1, 44, fsample);
 	
