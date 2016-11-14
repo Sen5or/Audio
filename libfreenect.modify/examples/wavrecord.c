@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
 		freenect_shutdown(f_ctx);
 		return 1;
 	}
-	printf("Kinect Found);
+	printf("Kinect Found");
 	int user_device_number = 0;
 	if (freenect_open_device(f_ctx, &f_dev, user_device_number) < 0) {
 		printf("Could not open device\n");
