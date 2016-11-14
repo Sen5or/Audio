@@ -153,6 +153,7 @@ int freenect_start_audio(freenect_device* dev) {
 	if (dev->audio.running)
 		return -1;
 
+	printf("Allocate buffers");
 	// Allocate buffers
 	dev->audio.audio_out_ring = (freenect_sample_51*)malloc(256 * sizeof(freenect_sample_51));
 	memset(dev->audio.audio_out_ring, 0, 256 * sizeof(freenect_sample_51));
@@ -164,7 +165,8 @@ int freenect_start_audio(freenect_device* dev) {
 		memset(dev->audio.mic_buffer[i], 0, 256*sizeof(int32_t));
 	}
 	dev->audio.in_unknown = malloc(48); // amount of data in small transfer
-
+	
+	printf("Init paras!");
 	// Set initial parameter values
 	dev->audio.ring_reader_idx = 0;
 	dev->audio.ring_writer_idx = 0;
@@ -178,7 +180,8 @@ int freenect_start_audio(freenect_device* dev) {
 	for(i = 0; i < 10; i++) {
 		dev->audio.last_seen_window[i] = 0;
 	}
-
+	
+	printf("Start streams!");
 	// Start isochronous streams
 	res = fnusb_start_iso(&dev->usb_audio, &dev->audio_in_isoc, iso_in_callback, 0x82, NUM_XFERS, PKTS_PER_XFER, 524);
 	if (res < 0) {

@@ -121,9 +121,11 @@ int main(int argc, char** argv) {
 	fwrite(wavheader, 1, 44, state.logfiles[1]);
 	fwrite(wavheader, 1, 44, state.logfiles[2]);
 	fwrite(wavheader, 1, 44, state.logfiles[3]);
+	printf("Start program!");
 	freenect_set_user(f_dev, &state);
-
+	printf("Set user successfully");
 	freenect_set_audio_in_callback(f_dev, in_callback);
+	printf("Set callback");
 	freenect_start_audio(f_dev);
 	printf("start audio");	
 	signal(SIGINT, cleanup);
