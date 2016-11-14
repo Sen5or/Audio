@@ -125,8 +125,8 @@ int main(int argc, char** argv) {
 
 	freenect_set_audio_in_callback(f_dev, in_callback);
 	freenect_start_audio(f_dev);
+	printf("start audio");	
 	signal(SIGINT, cleanup);
-	
 
 	//while(!die && freenect_process_events(f_ctx) >= 0) {
 		// If we did anything else, it might go here.
@@ -137,7 +137,8 @@ int main(int argc, char** argv) {
 	
 	sleep(10000);
 	freenect_stop_audio(f_dev);
-	
+	printf("stip audio");	
+
 	// Make the WAV header valid for each of the four files
 	int i;
 	for(i = 0; i < 4 ; i++) {
