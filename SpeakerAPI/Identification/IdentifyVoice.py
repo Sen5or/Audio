@@ -1,48 +1,45 @@
 import IdentificationServiceHttpClientHelper
+import threading
+import time
 import sys
 
-def identify_file(file_path):
-    """Identify an audio file on the server.
 
-    Arguments:
-    subscription_key -- the subscription key string
-    file_path -- the audio file path for identification
-    profile_ids -- an array of test profile IDs strings
-    force_short_audio -- waive the recommended minimum audio limit needed for enrollment
-    """
-    subscription_key = '136e62d920fc4696a91c1dbbf32d9a31'
-    force_short_audio = 'true'
-
-    helper = IdentificationServiceHttpClientHelper.IdentificationServiceHttpClientHelper(
-        subscription_key)
-
-
-    profile_ids = ["99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7", "de762baa-703c-4083-8595-000c3b389cb5", "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e", "33ab384c-029f-4dad-8249-9a863e85e04c"]
-    identification_response = helper.identify_file(
-        file_path, profile_ids,
-        force_short_audio.lower() == "true")
-    #print('Identified Speaker = {0}'.format(identification_response.get_identified_profile_id()))
-    print('Confidence = {0}'.format(identification_response.get_confidence()))        
-    if (identification_response.get_identified_profile_id() == "99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7"):
-        print('Identified Speaker = Frank')
-    elif (identification_response.get_identified_profile_id() == "de762baa-703c-4083-8595-000c3b389cb5"):
-        print('Cannot Identify Speaker')
-    elif (identification_response.get_identified_profile_id() == "33ab384c-029f-4dad-8249-9a863e85e04c"):
-        print('Identified Speaker = YiDan')
-    elif (identification_response.get_identified_profile_id() == "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e"):
-        print('Identified Speaker = Dhanesh')
-    else:
-	    print('Cannot Identify Speaker')
+class identify_thread (threading.Thread):
+    def __init__(self, path):
+        threading.Thread.__init__(self)
+        self.path = path
+        self.exec = True
+        self.profile_ids = ["99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7", "de762baa-703c-4083-8595-000c3b389cb5", "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e", "33ab384c-029f-4dad-8249-9a863e85e04c"]
+        subscription_key = '136e62d920fc4696a91c1dbbf32d9a31'
+        self.force_short_audio = 'true'
+        self.helper = IdentificationServiceHttpClientHelper.IdentificationServiceHttpClientHelper(subscription_key)
+    def run(self):
+        while self.exec:
+            identification_response = self.helper.identify_file(
+                self.path, self.profile_ids,
+                self.force_short_audio.lower() == "true")
+            if (identification_response.get_identified_profile_id() == "99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7"):
+                print('Frank')
+            elif (identification_response.get_identified_profile_id() == "33ab384c-029f-4dad-8249-9a863e85e04c"):
+                print('YiDan')
+            elif (identification_response.get_identified_profile_id() == "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e"):
+                print('Dhanesh')
+            else:
+                print('Cannot Identify Speaker')
+            time.sleep(5)
+    def terminate(self):
+        self.exec = False
+        print('Terminated!')
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print('Usage: python IdentifyFile.py <subscription_key> <identification_file_path>'
-              ' <profile_ids>...')
-        print('\t<subscription_key> is the subscription key for the service')
-        print('\t<identification_file_path> is the audio file path for identification')
-        print('\t<force_short_audio> True/False waives the recommended minimum audio limit needed '
-              'for enrollment')
-        print('\t<profile_ids> the profile IDs for the profiles to identify the audio from.')
+        print('Usage: python3 IdentifyFile.py <identification_file_path>')
         sys.exit('Error: Incorrect Usage.')
-
-    identify_file(sys.argv[1])
+    thread0 = identify_thread(sys.argv[1])
+    thread0.start()
+    s = ""
+    while (s != "E"):
+        s = input("Identification is running. Input E to exit.\n")
+    thread0.terminate();
+    # thread.start_new_thread(identify_file, (sys.argv[1]));
+    # identify_file(sys.argv[1])
