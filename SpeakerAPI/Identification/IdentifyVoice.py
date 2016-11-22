@@ -10,25 +10,29 @@ def identify_file(file_path):
     profile_ids -- an array of test profile IDs strings
     force_short_audio -- waive the recommended minimum audio limit needed for enrollment
     """
-    subscription_key = "key"
+    subscription_key = '136e62d920fc4696a91c1dbbf32d9a31'
     force_short_audio = 'true'
 
     helper = IdentificationServiceHttpClientHelper.IdentificationServiceHttpClientHelper(
         subscription_key)
 
 
-    profile_ids = ["id0", "id1", "id2"]
+    profile_ids = ["99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7", "de762baa-703c-4083-8595-000c3b389cb5", "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e", "33ab384c-029f-4dad-8249-9a863e85e04c"]
     identification_response = helper.identify_file(
         file_path, profile_ids,
         force_short_audio.lower() == "true")
     #print('Identified Speaker = {0}'.format(identification_response.get_identified_profile_id()))
-    #print('Confidence = {0}'.format(identification_response.get_confidence()))        
-    if (identification_response.get_identified_profile_id() == "id0"):
+    print('Confidence = {0}'.format(identification_response.get_confidence()))        
+    if (identification_response.get_identified_profile_id() == "99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7"):
         print('Identified Speaker = Frank')
-    elif (identification_response.get_identified_profile_id() == "id1"):
+    elif (identification_response.get_identified_profile_id() == "de762baa-703c-4083-8595-000c3b389cb5"):
+        print('Cannot Identify Speaker')
+    elif (identification_response.get_identified_profile_id() == "33ab384c-029f-4dad-8249-9a863e85e04c"):
         print('Identified Speaker = YiDan')
-    elif (identification_response.get_identified_profile_id() == "id2"):
+    elif (identification_response.get_identified_profile_id() == "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e"):
         print('Identified Speaker = Dhanesh')
+    else:
+	    print('Cannot Identify Speaker')
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
