@@ -15,7 +15,7 @@ def content():
 	AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "output.wav")
 	r = sr.Recognizer()
 	with sr.AudioFile(AUDIO_FILE) as source:
-	    audio = r.record(source) # read the entire audio file
+	    audio = r.record(source)
 	try:
 	    print(r.recognize_google(audio))
 	except sr.UnknownValueError:
@@ -25,6 +25,7 @@ def content():
 
 
 threads = []
+frames = []
 while True:
 	p = pyaudio.PyAudio()
 	stream = p.open(format=FORMAT,
@@ -35,12 +36,13 @@ while True:
 
 	print("* recording")
 
-	frames = []
-
 	for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
 	    data = stream.read(CHUNK)
 	    frames.append(data)
-
+	
+	if (len(frames) > 150):
+	    frames = frames[75:225]
+	
 	print("* done recording")
 
 	stream.stop_stream()
@@ -53,7 +55,7 @@ while True:
 	wf.setframerate(RATE)
 	wf.writeframes(b''.join(frames))
 	wf.close()
-	
+
 	t = threading.Thread(target = content)
 	threads.append(t)
 	t.start()
