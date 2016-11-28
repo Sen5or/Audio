@@ -33,13 +33,11 @@ class identify_thread (threading.Thread):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print('Usage: python3 IdentifyFile.py <identification_file_path>')
-        sys.exit('Error: Incorrect Usage.')
+        print('Use Default wav file output.wav')
+        sys.argv.append('output.wav')
     thread0 = identify_thread(sys.argv[1])
     thread0.start()
     s = ""
     while (s != "E"):
         s = input("Identification is running. Input E to exit.\n")
     thread0.terminate();
-    # thread.start_new_thread(identify_file, (sys.argv[1]));
-    # identify_file(sys.argv[1])
