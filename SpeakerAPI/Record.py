@@ -3,6 +3,7 @@ import wave
 import speech_recognition as sr
 from os import path
 import threading
+import sys
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -17,11 +18,11 @@ def content():
 	with sr.AudioFile(AUDIO_FILE) as source:
 	    audio = r.record(source)
 	try:
-	    print(r.recognize_google(audio))
+	    sys.stderror.write(r.recognize_google(audio))
 	except sr.UnknownValueError:
-	    print("Google Speech Recognition could not understand audio")
+	    sys.stderror.write("Google Speech Recognition could not understand audio")
 	except sr.RequestError as e:
-	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+	    sys.stderror.write("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
 threads = []
@@ -34,7 +35,7 @@ while True:
 	                input=True,
 	                frames_per_buffer=CHUNK)
 
-	print("* recording")
+	sys.stderror.write("* recording")
 
 	for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
 	    data = stream.read(CHUNK)
@@ -43,7 +44,7 @@ while True:
 	if (len(frames) > 150):
 	    frames = frames[75:225]
 	
-	print("* done recording")
+	sys.stderror.write("* done recording")
 
 	stream.stop_stream()
 	stream.close()
