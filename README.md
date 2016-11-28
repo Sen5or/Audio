@@ -1,23 +1,15 @@
 # Audio
 
-## Modified Files:
+## Record Voice
 
-libfreenect.modify/examples/wavrecord.c
-							CMakeList.txt
+python Record.py
 
-## Record voice  (Notice: this part may not work currently)
+## Recognize Speaker
 
-cd libfreenect
-mkdir build
-cd build
-cmake -L .. # -L lists all the project options
-cd examples
-make
-cd ../bin
+python3 Identification/IdentifySpeaker.py (output.wav)
 
-Then execuable file is in the folder, it will record 4 channel voice use Kinect, and then sample a 16 bit * 16000 sample.wav from channel0.wav
+## Identify Content
 
-## Identify Voice
+python3 Speech.py 
 
-cd SpeakerAPI
-python identification/identifyVoice.py Frank.wav
+* Defaultly read output.wav as input file
