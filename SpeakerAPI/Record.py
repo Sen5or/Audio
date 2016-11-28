@@ -4,6 +4,7 @@ import speech_recognition as sr
 from os import path
 import threading
 import sys
+import IdentificationServiceHttpClientHelper
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -18,15 +19,39 @@ def content():
 	with sr.AudioFile(AUDIO_FILE) as source:
 	    audio = r.record(source)
 	try:
-	    sys.stderror.write(r.recognize_google(audio))
+	    print(r.recognize_google(audio))
 	except sr.UnknownValueError:
-	    sys.stderror.write("Google Speech Recognition could not understand audio")
+	    print("Google Speech Recognition could not understand audio")
 	except sr.RequestError as e:
-	    sys.stderror.write("Could not request results from Google Speech Recognition service; {0}".format(e))
+	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+def speaker():
+	path = "output.wav"
+	profile_ids = ["99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7", "de762baa-703c-4083-8595-000c3b389cb5", "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e", "33ab384c-029f-4dad-8249-9a863e85e04c"]
+	subscription_key = '136e62d920fc4696a91c1dbbf32d9a31'
+	force_short_audio = 'true'
+	helper = IdentificationServiceHttpClientHelper.IdentificationServiceHttpClientHelper(subscription_key)
+
+	identification_response = helper.identify_file(
+	                path, profile_ids,
+	                force_short_audio.lower() == "true")
+	try:
+		if (identification_response.get_identified_profile_id() == "99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7"):
+		    print('Frank')
+		elif (identification_response.get_identified_profile_id() == "33ab384c-029f-4dad-8249-9a863e85e04c"):
+		    print('YiDan')
+		elif (identification_response.get_identified_profile_id() == "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e"):
+		    print('Dhanesh')
+		else:
+		    print('Cannot Identify Speaker')
+	except:
+		print('Error Return')
+
 
 
 threads = []
 frames = []
+s = 0
 while True:
 	p = pyaudio.PyAudio()
 	stream = p.open(format=FORMAT,
@@ -35,7 +60,7 @@ while True:
 	                input=True,
 	                frames_per_buffer=CHUNK)
 
-	sys.stderror.write("* recording")
+	print("* recording")
 
 	for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
 	    data = stream.read(CHUNK)
@@ -44,7 +69,7 @@ while True:
 	if (len(frames) > 150):
 	    frames = frames[75:225]
 	
-	sys.stderror.write("* done recording")
+	print("* done recording")
 
 	stream.stop_stream()
 	stream.close()
@@ -60,4 +85,12 @@ while True:
 	t = threading.Thread(target = content)
 	threads.append(t)
 	t.start()
+
+	if (s == 1) :
+		t = threading.Thread(target = speaker)
+		threads.append(t)
+		t.start()
+		s = 0
+	else:
+		s = 1
 
