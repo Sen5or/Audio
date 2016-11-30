@@ -30,9 +30,8 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-import httplib
-import urlparse
-import urllib
+import http.client
+import urllib.parse
 import json
 import time
 from contextlib import closing
@@ -265,10 +264,10 @@ class IdentificationServiceHttpClientHelper:
             test_profile_ids_str = ','.join(test_profile_ids)
             request_url = '{0}?identificationProfileIds={1}&{2}={3}'.format(
                 self._IDENTIFICATION_URI,
-                urllib.pathname2url(test_profile_ids_str),
+                urllib.parse.quote(test_profile_ids_str),
                 self._SHORT_AUDIO_PARAMETER_NAME,
                 force_short_audio)
-            
+
             # Prepare the body of the message
             with open(file_path, 'rb') as body:
                 # Send the request
@@ -284,11 +283,12 @@ class IdentificationServiceHttpClientHelper:
                 return IdentificationResponse.IdentificationResponse(json.loads(message))
             elif res.status == self._STATUS_ACCEPTED:
                 operation_url = res.getheader(self._OPERATION_LOCATION_HEADER)
+
                 return IdentificationResponse.IdentificationResponse(
                     self._poll_operation(operation_url))
             else:
                 reason = res.reason if not message else message
-                # raise Exception('Error identifying file: ' + reason)
+                raise Exception('Error identifying file: ' + reason)
         except:
             logging.error('Error identifying file.')
             raise
@@ -301,7 +301,7 @@ class IdentificationServiceHttpClientHelper:
         """
         try:
             # Parse the operation URL
-            parsed_url = urlparse.urlparse(operation_url)
+            parsed_url = urllib.parse.urlparse(operation_url)
 
             while True:
                 # Send the request
@@ -347,7 +347,7 @@ class IdentificationServiceHttpClientHelper:
                        self._SUBSCRIPTION_KEY_HEADER: self._subscription_key}
 
             # Start the connection
-            with closing(httplib.HTTPSConnection(base_url)) as conn:
+            with closing(http.client.HTTPSConnection(base_url)) as conn:
                 # Send the request
                 conn.request(method, request_url, body, headers)
                 res = conn.getresponse()

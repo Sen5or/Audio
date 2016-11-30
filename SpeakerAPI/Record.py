@@ -24,9 +24,9 @@ def content():
 	try:
 		print(r.recognize_google(audio))
 	except sr.UnknownValueError:
-		sys.stderr.write("Google Speech Recognition could not understand audio")
+		sys.stderr.write("Google Speech Recognition could not understand audio\n")
 	except sr.RequestError as e:
-		sys.stderr.write("Could not request results from Google Speech Recognition service; {0}".format(e))
+		sys.stderr.write("Could not request results from Google Speech Recognition service; {0}\n".format(e))
 
 	sys.stdout.flush()
 
