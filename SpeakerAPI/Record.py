@@ -32,7 +32,7 @@ def content():
 
 def speaker():
 	#path = "output.wav"
-	profile_ids = ["99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7", "de762baa-703c-4083-8595-000c3b389cb5", "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e", "33ab384c-029f-4dad-8249-9a863e85e04c"]
+	profile_ids = ["2ec9f081-5188-438a-b7f7-d374f9bbf88f", "99ef319e-a9a5-4a46-b679-cf2e7e4ca5f7", "de762baa-703c-4083-8595-000c3b389cb5", "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e", "33ab384c-029f-4dad-8249-9a863e85e04c"]
 	subscription_key = '136e62d920fc4696a91c1dbbf32d9a31'
 	force_short_audio = 'true'
 	helper = IdentificationServiceHttpClientHelper.IdentificationServiceHttpClientHelper(subscription_key)
@@ -47,6 +47,8 @@ def speaker():
 			print('YiDan')
 		elif (identification_response.get_identified_profile_id() == "3c5ef345-39ee-41bc-a5fb-63154a5b8f1e"):
 			print('Dhanesh')
+		elif (identification_response.get_identified_profile_id() == "2ec9f081-5188-438a-b7f7-d374f9bbf88f"):
+			print('Carlito')
 		else:
 			print('Cannot Identify Speaker')
 	except:
